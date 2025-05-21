@@ -1,8 +1,16 @@
 from pathlib import Path
 
 import structlog
+from dishka import FromDishka
 from pydantic import BaseModel
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
+from sqlalchemy.ext.asyncio import AsyncSession
+from telegram import (
+    Chat,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Update,
+    WebAppInfo,
+)
 from telegram.constants import ParseMode
 from telegram.ext import CommandHandler
 
@@ -13,6 +21,7 @@ from app.core.errors import AppError
 from app.core.llm import load_prompts
 from app.tgbot.context import Context
 from app.tgbot.decorators import db_session, requires_auth
+from app.tgbot.dishka import inject
 from app.tgbot.utils import (
     LocalizedTexts,
     extract_user_data,
@@ -48,21 +57,20 @@ except:
     raise
 
 
-@db_session
-async def start(update: Update, context: Context) -> None:
+@inject
+async def start(
+    update: Update,
+    context: Context,
+    chat: FromDishka[Chat],
+    db_session: FromDishka[AsyncSession],
+) -> None:
     user_data = extract_user_data(update)
     if user_data is None:
         raise AppError("User data is None")
-    # TODO: provide in context
-    if not context.db_session:
-        raise AppError("DB session is None")
 
     texts = get_texts(TEXTS, user_data.language_code)
-    chat = update.effective_chat
-    if not chat:
-        return
 
-    user_svc = TGUserService(context.db_session)
+    user_svc = TGUserService(db_session)
     user = await user_svc.get_user_and_update(user_data)
     if not user:
         invite_code = get_invite_code(context)

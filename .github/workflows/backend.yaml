@@ -1,0 +1,104 @@
+name: backend
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - packages/sdk/**
+      - packages/webapp/**
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: packages/backend
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16.2
+        env:
+          POSTGRES_DB: db_test
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password123
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5441:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+
+      - name: Run lint
+        run: |
+          source .venv/bin/activate
+          task lint
+
+      - name: Run mypy
+        run: |
+          source .venv/bin/activate
+          task mypy
+
+  deploy:
+    name: deploy 🚀
+    runs-on: ubuntu-latest
+    needs: [lint]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: deploy
+        name: Deploy
+        run: |
+          echo "Deploying..."
+      - name: Notify on failure
+        if: ${{ failure() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ vars.TELEGRAM_UPDATES_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ❌ TGWebApp[backend]. Deploy failed
+
+            Commit message: ${{ github.event.commits[0].message }}
+            https://github.com/${{ github.repository }}/actions/runs/${{github.run_id}}
+      - name: Notify on success
+        if: ${{ success() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ vars.TELEGRAM_UPDATES_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ✅ TGWebApp[backend]. Deploy succeed
+
+            Commit message: ${{ github.event.commits[0].message }}
+            https://github.com/${{ github.repository }}/actions/runs/${{github.run_id}}

@@ -1,0 +1,24 @@
+root:
+  title: Добро пожаловать в TG WebApp
+payment:
+  title: Ваши кредиты
+  balance_title: Ваш текущий баланс
+  balance_hint: Кредиты используются для генерации контента и работы ваших ботов
+  select_package: Выберите пакет
+  buy_package_one: |
+    Купить {{credits}} кредит за ☆ {{stars}}
+  buy_package_few: |
+    Купить {{credits}} кредита за ☆ {{stars}}
+  buy_package_many: |
+    Купить {{credits}} кредитов за ☆ {{stars}}
+  processing: Обработка...
+  _components:
+    PackageBlock:
+      credits: кредиты
+      credits_one: кредит
+      credits_few: кредита
+      credits_many: кредитов
+      popular: Самый популярный
+      starter: Новичок
+      business: Бизнес
+      agency: Агентство

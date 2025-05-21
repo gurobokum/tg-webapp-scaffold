@@ -1,0 +1,23 @@
+{
+  "name": "@tg-webapp/sdk",
+  "version": "0.1.0",
+  "description": "TG Webapp SDK",
+  "main": "./src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "generate_openapi": "openapi-ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hey-api/client-fetch": "^0.10.0"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "^0.66.6",
+    "eslint": "^9",
+    "prettier": "3.5.3",
+    "tsup": "^8.4.0"
+  }
+}

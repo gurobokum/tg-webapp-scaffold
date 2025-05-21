@@ -1,0 +1,8 @@
+.python-version
+.DS_Store
+
+node_modules/
+examples/
+_docs/
+
+.vscode/

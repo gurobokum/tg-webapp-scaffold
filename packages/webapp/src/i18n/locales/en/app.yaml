@@ -1,0 +1,17 @@
+root:
+  title: Hello to TG WebApp
+payment:
+  title: Credits
+  balance_title: Your current balance
+  balance_hint: Credits are used to generate content and power your bots
+  select_package: Select a package
+  buy_package: |
+    Buy {{credits}} Credits for ☆ {{stars}}
+  _components:
+    PackageBlock:
+      credits: credits
+      credits_one: credit
+      popular: Most Popular
+      starter: Starter
+      business: Business
+      agency: Agency

@@ -1,0 +1,22 @@
+handlers:
+  ru:
+    start:
+      welcome_text: |
+        👋 Привет! Добро пожаловать в TG WebApp — скелетон телеграм вебаппа.
+
+        https://github.com/gurobokum/tg-webapp-scaffold
+      welcome_back_text: |
+        👋 С возвращением в TG WebApp!
+
+        https://github.com/gurobokum/tg-webapp-scaffold
+  en:
+    start:
+      welcome_text: |
+        👋 Hi! Welcome to TG WebApp — a skeleton for a Telegram WebApp.
+
+        https://github.com/gurobokum/tg-webapp-scaffold
+
+      welcome_back_text: |
+        👋 Welcome back to TG WebApp!
+
+        https://github.com/gurobokum/tg-webapp-scaffold

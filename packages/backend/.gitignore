@@ -1,0 +1,16 @@
+.coverage
+coverage.json
+.env
+.python-version
+
+__pycache__/
+.db/
+.minio/
+.rabbitmq/
+.redis/
+.weaviate/
+.ollama/
+.scripts/
+
+.sw?
+*.session

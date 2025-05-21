@@ -1,0 +1,361 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "TG WebApp scaffold",
+        "summary": "TG WebApp scaffold",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/tgbot/auth/": {
+            "get": {
+                "tags": [
+                    "tgbot",
+                    "auth"
+                ],
+                "summary": "Me",
+                "operationId": "auth::me",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TGUser"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "APIKeyHeader": []
+                    }
+                ]
+            }
+        },
+        "/tgbot/webhook": {
+            "post": {
+                "tags": [
+                    "tgbot"
+                ],
+                "summary": "Post Webhook",
+                "operationId": "post_webhook",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPForbiddenError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/credits/packages": {
+            "get": {
+                "tags": [
+                    "tg_credits"
+                ],
+                "summary": "List Packages",
+                "description": "Get list of available packages",
+                "operationId": "tg::credits::list_packages",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/CreditsPackage"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Tg::Credits::List Packages"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPUnauthorizedError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "APIKeyHeader": []
+                    }
+                ]
+            }
+        },
+        "/credits/send_invoice": {
+            "put": {
+                "tags": [
+                    "tg_credits"
+                ],
+                "summary": "Send Invoice",
+                "description": "Send payment invoice for user",
+                "operationId": "tg::credits::send_invoice",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BuyCreditsRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPUnauthorizedError"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "APIKeyHeader": []
+                    }
+                ]
+            }
+        },
+        "/": {
+            "get": {
+                "summary": "Root",
+                "operationId": "root",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "type": "object",
+                                    "title": "Response Root"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "BuyCreditsRequest": {
+                "properties": {
+                    "package_name": {
+                        "type": "string",
+                        "title": "Package Name"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "package_name"
+                ],
+                "title": "BuyCreditsRequest"
+            },
+            "CreditsPackage": {
+                "properties": {
+                    "package_name": {
+                        "type": "string",
+                        "title": "Package Name"
+                    },
+                    "credits_amount": {
+                        "type": "integer",
+                        "title": "Credits Amount"
+                    },
+                    "stars_amount": {
+                        "type": "integer",
+                        "title": "Stars Amount"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "package_name",
+                    "credits_amount",
+                    "stars_amount"
+                ],
+                "title": "CreditsPackage"
+            },
+            "HTTPForbiddenError": {
+                "properties": {
+                    "detail": {
+                        "type": "string",
+                        "title": "Detail"
+                    },
+                    "status_code": {
+                        "type": "integer",
+                        "title": "Status Code"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "detail",
+                    "status_code"
+                ],
+                "title": "HTTPForbiddenError"
+            },
+            "HTTPUnauthorizedError": {
+                "properties": {
+                    "detail": {
+                        "type": "string",
+                        "title": "Detail"
+                    },
+                    "status_code": {
+                        "type": "integer",
+                        "title": "Status Code"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "detail",
+                    "status_code"
+                ],
+                "title": "HTTPUnauthorizedError"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "TGUser": {
+                "properties": {
+                    "tg_id": {
+                        "type": "integer",
+                        "title": "Tg Id"
+                    },
+                    "username": {
+                        "type": "string",
+                        "title": "Username",
+                        "default": ""
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "title": "First Name",
+                        "default": ""
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "title": "Last Name",
+                        "default": ""
+                    },
+                    "language_code": {
+                        "type": "string",
+                        "title": "Language Code",
+                        "default": ""
+                    },
+                    "is_bot": {
+                        "type": "boolean",
+                        "title": "Is Bot",
+                        "default": false
+                    },
+                    "is_admin": {
+                        "type": "boolean",
+                        "title": "Is Admin",
+                        "default": false
+                    },
+                    "credits_balance": {
+                        "type": "integer",
+                        "title": "Credits Balance"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "tg_id",
+                    "credits_balance"
+                ],
+                "title": "TGUser"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "APIKeyHeader": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "x-telegram-auth"
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16.2
+    container_name: tg_webapp_db
+    command: postgres -c log_statement=all
+    volumes:
+      - ./.db/:/var/lib/postgresql/data/
+      - ./scripts/create_multiple_postgresql_databases.sh:/docker-entrypoint-initdb.d/09_create_multiple_postgresql_databases.sh
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=db,db_test
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password123
+    ports:
+      - 5443:5432 # exposed 5443 port for avoiding conflicts with other instances
+
+  redis:
+    image: redis/redis-stack:7.2.0-v13
+    container_name: tg_webapp_redis
+    volumes:
+      - ./.redis:/data/
+    ports:
+      - 6379:6379
+      - 8001:8001 # RedisInsight dashboard
+
+  minio:
+    image: minio/minio:latest
+    container_name: tg_webapp_minio
+    volumes:
+      - ./.minio:/data/
+    entrypoint: sh
+    command: -c 'mkdir -p /data/tg_webapp && /usr/bin/docker-entrypoint.sh server /data --console-address ":9001"'
+    environment:
+      - MINIO_ROOT_USER=user
+      - MINIO_ROOT_PASSWORD=password123
+    ports:
+      - 9000:9000
+      - 9001:9001 # Management dashboard

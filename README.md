@@ -40,7 +40,7 @@ It contains:
 ## Installation
 
 1. Install [pnpm](https://pnpm.io/installation#using-npm)
-2. Install [poetry](https://python-poetry.org/docs/#installation)
+2. Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 3. Install dependencies
    ```bash
    pnpm install

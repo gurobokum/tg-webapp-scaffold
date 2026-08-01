@@ -10,8 +10,8 @@ LABEL name="TG WebApp" \
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_VIRTUALENVS_CREATE=false \
-    POETRY_VERSION=2.1.1 \
+    UV_PROJECT_ENVIRONMENT=/usr/local \
+    UV_COMPILE_BYTECODE=1 \
     APP_USER=tg_webapp \
     APP_HOME=/app
 
@@ -23,15 +23,12 @@ RUN apt-get update \
         build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/home/${APP_USER}/.local/bin:${PATH}"
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir poetry==${POETRY_VERSION}
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 
 WORKDIR $APP_HOME
 
-COPY --chown=$APP_USER:$APP_USER poetry.lock pyproject.toml ./
-RUN poetry install --no-root --no-cache && \
-    poetry cache clear pypi --all && rm -r ~/.cache/pypoetry
+COPY --chown=$APP_USER:$APP_USER uv.lock pyproject.toml ./
+RUN uv sync --frozen --no-install-project --no-cache
 
 USER $APP_USER
 COPY --chown=$APP_USER:$APP_USER . .

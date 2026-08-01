@@ -16,7 +16,7 @@ class Env(str, Enum):
 def get_version() -> str:
     with open(Path(__file__).parent.parent / "pyproject.toml", "rb") as f:
         data = tomllib.load(f)
-        return cast(str, data["tool"]["poetry"]["version"])
+        return cast(str, data["project"]["version"])
 
 
 class Settings(BaseSettings):

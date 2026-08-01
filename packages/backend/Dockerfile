@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM docker.io/python:3.12.4-slim-bullseye
+FROM docker.io/python:3.13.3-slim-bullseye
 
 LABEL name="TG WebApp" \
       maintainer="Guro Bokum <jiojiajiu@gmail.com>" \

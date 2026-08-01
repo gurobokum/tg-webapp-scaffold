@@ -19,7 +19,7 @@ printmigrations = "./scripts/print_migrations.sh"
 generate_openapi = "python -m scripts.generate_openapi"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.13"
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.40"}
 fastapi = "^0.115.12"
 asyncpg = "^0.30.0"

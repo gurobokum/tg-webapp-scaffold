@@ -6,6 +6,10 @@ export const cookieName = "tg_webapp_lang";
 export type Language = (typeof languages)[number];
 export type Namespace = (typeof namespaces)[number];
 
+export function isSupportedLanguage(lang: string): lang is Language {
+  return (languages as readonly string[]).includes(lang);
+}
+
 export const i18nOptions = {
   supportedLngs: languages,
   ns: ["app", "components"],

@@ -10,15 +10,6 @@ const nextConfig: NextConfig = {
     },
   },
 
-  webpack: (config) => {
-    config.module?.rules.push({
-      test: /\.ya?ml$/,
-      use: "yaml-loader",
-    });
-
-    return config;
-  },
-
   images: {
     remotePatterns: [
       {

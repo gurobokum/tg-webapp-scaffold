@@ -14,7 +14,7 @@ export const config = {
 };
 
 // https://www.locize.com/blog/next-app-dir-i18n
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   let lang;
 
   if (request.cookies.has(cookieName)) {
@@ -29,10 +29,10 @@ export function middleware(request: NextRequest) {
     lang = fallbackLang;
   }
 
+  const firstSegment = request.nextUrl.pathname.split("/")[1];
+
   if (
-    !languages.some((lang) =>
-      request.nextUrl.pathname.startsWith(`/${lang}`)
-    ) &&
+    !languages.includes(firstSegment) &&
     !request.nextUrl.pathname.startsWith("/_next")
   ) {
     return NextResponse.redirect(

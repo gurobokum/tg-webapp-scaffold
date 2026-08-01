@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
 import QueryClientProvider from "@/providers/QueryClientProvider";
 import { WebAppProvider } from "@/providers/WebAppProvider";
-import { Language } from "@/i18n/conf";
+import { isSupportedLanguage } from "@/i18n/conf";
 
 import "../globals.css";
 
@@ -30,13 +31,11 @@ export async function generateStaticParams() {
 export default async function RootLayout({
   params,
   children,
-}: Readonly<{
-  params: Promise<{
-    lang: Language;
-  }>;
-  children: React.ReactNode;
-}>) {
+}: LayoutProps<"/[lang]">) {
   const { lang } = await params;
+  if (!isSupportedLanguage(lang)) {
+    notFound();
+  }
 
   return (
     <html lang={lang} suppressHydrationWarning>

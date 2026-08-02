@@ -2,10 +2,10 @@
   "name": "tg-webapp",
   "version": "0.1.0",
   "engines": {
-    "node": ">=20.11.1"
+    "node": ">=24"
   },
   "type": "module",
-  "packageManager": "pnpm@9.15.3",
+  "packageManager": "pnpm@11.18.0",
   "description": "AI SMM Agent",
   "scripts": {
     "start": "pnpm -F pnpm -F @tg-webapp/webapp start",

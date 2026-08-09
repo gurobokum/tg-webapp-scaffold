@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import acceptLanguage from "accept-language";
 import { NextRequest } from "next/server";
-import { cookieName, fallbackLang } from "@/i18n/conf";
+import {
+  cookieName,
+  fallbackLang,
+  isSupportedLanguage,
+  languages,
+} from "@/i18n/conf";
 
-const languages = ["ru", "en"];
-acceptLanguage.languages(languages);
+acceptLanguage.languages([...languages]);
 
 export const config = {
   // matcher: '/:lang*'
@@ -25,14 +29,14 @@ export function proxy(request: NextRequest) {
     lang = acceptLanguage.get(request.headers.get("Accept-Language"));
   }
 
-  if (!lang || !languages.includes(lang)) {
+  if (!lang || !isSupportedLanguage(lang)) {
     lang = fallbackLang;
   }
 
   const firstSegment = request.nextUrl.pathname.split("/")[1];
 
   if (
-    !languages.includes(firstSegment) &&
+    !isSupportedLanguage(firstSegment) &&
     !request.nextUrl.pathname.startsWith("/_next")
   ) {
     return NextResponse.redirect(
@@ -43,9 +47,10 @@ export function proxy(request: NextRequest) {
   const referer = request.headers.get("referer");
   if (referer) {
     const refererUrl = new URL(referer);
-    const langInReferer = languages.find((lang) =>
-      refererUrl.pathname.startsWith(`/${lang}`)
-    );
+    const refererFirstSegment = refererUrl.pathname.split("/")[1];
+    const langInReferer = isSupportedLanguage(refererFirstSegment)
+      ? refererFirstSegment
+      : undefined;
     const response = NextResponse.next();
     if (langInReferer) {
       response.cookies.set(cookieName, langInReferer);

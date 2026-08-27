@@ -1,0 +1,9 @@
+handlers:
+  ru:
+    complete_payment:
+      purchase_failed: |
+        Покупка не прошла, пожалуйста, обратитесь в поддержку
+  en:
+    complete_payment:
+      purchase_failed: |
+        Purchase failed, please contact support

@@ -10,6 +10,7 @@ from telegram import Chat, Message, Update
 from app.auth.models import TGAdminUser, TGUser
 from app.auth.services import TGUserService
 from app.core.errors import AppError, ForbiddenError, UserIsBlockedError
+from app.credits.i18n import TGBotCreditsI18NProvider
 from app.dishka import ServicesProvider
 from app.dishka import inject as inject_factory
 from app.tgbot.context import Context
@@ -78,6 +79,7 @@ tg_container = make_async_container(
     TGBotRootProvider(),
     ServicesProvider(),
     TGBotI18NProvider(),
+    TGBotCreditsI18NProvider(),
 )
 
 

@@ -2,25 +2,16 @@ from pathlib import Path
 
 import structlog
 from dishka import FromDishka, Provider, Scope, provide
-from pydantic import BaseModel
 from telegram import Update
 
 from app.core.errors import AppError
 from app.core.llm import load_prompts
+from app.tgbot.i18n._generated import HandlersTexts as HandlersTexts
 from app.tgbot.utils import LocalizedTexts, extract_user_data, get_texts
 
 logger = structlog.get_logger()
 
 type Language = str
-
-
-class StartTexts(BaseModel):
-    welcome_text: str
-    welcome_back_text: str
-
-
-class HandlersTexts(BaseModel):
-    start: StartTexts
 
 
 class Texts(LocalizedTexts[HandlersTexts]):

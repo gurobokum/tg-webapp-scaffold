@@ -7,6 +7,7 @@ from telegram.ext import MessageHandler, PreCheckoutQueryHandler, filters
 
 from app.auth.models import TGUser
 from app.core.errors import AppError, NotFoundError
+from app.credits.i18n import HandlersTexts as CreditsHandlersTexts
 from app.credits.models import CreditsPurchaseStatus
 from app.credits.services import TGUserCreditsService
 from app.tgbot.context import Context
@@ -52,6 +53,7 @@ async def complete_payment(
     context: Context,
     user: FromDishka[TGUser],
     credits_svc: FromDishka[TGUserCreditsService],
+    texts: FromDishka[CreditsHandlersTexts],
 ) -> None:
     message = update.message
     if not message:
@@ -70,9 +72,7 @@ async def complete_payment(
 
     purchase = await credits_svc.get_purchase(UUID(payload["id"]))
     if not purchase or purchase.status != CreditsPurchaseStatus.CONFIRMED:
-        await message.reply_text(
-            "Purchase failed, please contact with @bot_support",
-        )
+        await message.reply_text(texts.complete_payment.purchase_failed)
         raise NotFoundError("[CRITICAL] Purchase not found")
 
     await credits_svc.complete_purchase(

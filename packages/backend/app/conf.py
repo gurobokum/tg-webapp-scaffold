@@ -54,7 +54,6 @@ class Settings(BaseSettings):
     LOGFIRE_TOKEN: SecretStr | None = None
     # Optional -- LLM
     OPENAI_API_KEY: SecretStr
-    REPLICATE_API_KEY: SecretStr
 
 
 # https://github.com/pydantic/pydantic/issues/3753

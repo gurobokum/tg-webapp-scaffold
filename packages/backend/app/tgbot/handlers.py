@@ -1,12 +1,6 @@
 import structlog
 from dishka import FromDishka
-from telegram import (
-    Chat,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    Update,
-    WebAppInfo,
-)
+from telegram import Chat, Update, WebAppInfo
 from telegram.constants import ParseMode
 from telegram.ext import CommandHandler
 
@@ -18,7 +12,7 @@ from app.core.errors import AppError
 from app.tgbot.context import Context
 from app.tgbot.dishka import inject
 from app.tgbot.i18n import HandlersTexts
-from app.tgbot.utils import extract_user_data, get_invite_code
+from app.tgbot.utils import extract_user_data, get_invite_code, keyboard
 
 logger = structlog.get_logger()
 
@@ -49,8 +43,8 @@ async def start(
 
     await chat.send_message(
         text=texts.start.welcome_back_text,
-        reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("Setup", web_app=WebAppInfo(settings.WEBAPP_URL))]]
+        reply_markup=keyboard(
+            [(texts.start.button_setup, WebAppInfo(settings.WEBAPP_URL))]
         ),
     )
 

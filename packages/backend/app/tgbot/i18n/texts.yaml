@@ -9,6 +9,7 @@ handlers:
         👋 С возвращением в TG WebApp!
 
         https://github.com/gurobokum/tg-webapp-scaffold
+      button_setup: Открыть приложение
   en:
     start:
       welcome_text: |
@@ -20,3 +21,4 @@ handlers:
         👋 Welcome back to TG WebApp!
 
         https://github.com/gurobokum/tg-webapp-scaffold
+      button_setup: Open the app

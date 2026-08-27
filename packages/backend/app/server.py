@@ -36,7 +36,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[AppState, None]:
         async with start_tg_app(session_maker) as tg_app:
             yield AppState(tg_app=tg_app, session_maker=session_maker, arq=arq)
     finally:
-        ...
+        await engine.dispose()
+        await arq.aclose()
 
 
 app = FastAPI(

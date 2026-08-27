@@ -1,47 +1,84 @@
-from collections.abc import AsyncIterator, Callable, Coroutine
-from typing import Any
+from collections.abc import AsyncIterator
+from functools import partial
+from typing import Any, cast
 
 from dishka import Provider, Scope, from_context, make_async_container, provide
-from dishka.integrations.base import wrap_injection
+from redis.asyncio import Redis as AsyncRedis
 from sqlalchemy.ext.asyncio import AsyncSession
-from telegram import Chat, Update
+from telegram import Chat, Message, Update
 
-from app.core.errors import AppError
+from app.auth.models import TGAdminUser, TGUser
+from app.auth.services import TGUserService
+from app.core.errors import AppError, ForbiddenError, UserIsBlockedError
+from app.dishka import ServicesProvider
+from app.dishka import inject as inject_factory
 from app.tgbot.context import Context
+from app.tgbot.i18n import TGBotI18NProvider
+from app.tgbot.utils import extract_user_data
 
 
-class TGBotProvider(Provider):
+class TGBotRootProvider(Provider):
     update = from_context(provides=Update, scope=Scope.REQUEST)
     context = from_context(provides=Context, scope=Scope.REQUEST)
 
     @provide(scope=Scope.REQUEST)
-    async def db_session(self, context: Context) -> AsyncIterator[AsyncSession]:
+    async def get_db_session(self, context: Context) -> AsyncIterator[AsyncSession]:
         async with context.db_session_maker() as db_session:
             yield db_session
 
     @provide(scope=Scope.REQUEST)
-    def chat(self, update: Update) -> Chat:
+    def get_redis(self, context: Context) -> AsyncRedis:
+        if not context.redis:
+            raise AppError("Redis is None")
+        return context.redis
+
+    @provide(scope=Scope.REQUEST)
+    def get_chat(self, update: Update) -> Chat:
         chat = update.effective_chat
         if not chat:
             raise AppError("Chat is None")
         return chat
 
+    @provide(scope=Scope.REQUEST)
+    def get_query_message(self, update: Update) -> Message:
+        if not update.callback_query:
+            raise AppError("Callback query is None")
 
-tg_container = make_async_container(TGBotProvider())
+        message = update.callback_query.message
+        if not message:
+            raise AppError("Message is None")
+        if not message.is_accessible:
+            raise AppError("Message is not accessible")
+
+        return cast(Message, message)
+
+    @provide(scope=Scope.REQUEST)
+    async def signin_user(self, update: Update, db_session: AsyncSession) -> TGUser:
+        user_data = extract_user_data(update)
+        if not user_data:
+            raise AppError("User data is None")
+
+        user_svc = TGUserService(db_session)
+        tg_user = await user_svc.get_user_and_update(user_data)
+        if not tg_user:
+            raise ForbiddenError("User not found", tg_id=user_data.tg_id)
+        if tg_user.is_blocked:
+            raise UserIsBlockedError
+
+        return tg_user
+
+    @provide(scope=Scope.REQUEST)
+    def signin_admin_user(self, tg_user: TGUser) -> TGAdminUser:
+        if not tg_user.is_admin:
+            raise ForbiddenError("User is not admin", tg_user_id=tg_user.tg_id)
+        return cast(TGAdminUser, tg_user)
 
 
-def inject(
-    func: Callable[..., Coroutine[Any, Any, Any]],
-) -> Callable[..., Coroutine[Any, Any, Any]]:
-    injected_func = wrap_injection(
-        func=func,
-        is_async=True,
-        container_getter=lambda *_: tg_container,
-        manage_scope=True,
-        provide_context=provide_context,
-    )
-
-    return injected_func
+tg_container = make_async_container(
+    TGBotRootProvider(),
+    ServicesProvider(),
+    TGBotI18NProvider(),
+)
 
 
 def provide_context(args: tuple[Any, ...], _: dict[str, Any]) -> dict[Any, Any]:
@@ -49,3 +86,6 @@ def provide_context(args: tuple[Any, ...], _: dict[str, Any]) -> dict[Any, Any]:
         Update: args[0],
         Context: args[1],
     }
+
+
+inject = partial(inject_factory, tg_container, provide_context)

@@ -1,6 +1,7 @@
 from typing import Any
 
 from arq.connections import ArqRedis
+from redis.asyncio import Redis as AsyncRedis
 from sqlalchemy.ext.asyncio import AsyncSession
 from telegram.ext import CallbackContext, ExtBot
 
@@ -13,6 +14,7 @@ class Context(
 ):
     db_session_maker: AsyncSessionMaker
     arq: ArqRedis
+    redis: AsyncRedis
 
     db_session: AsyncSession | None = None
     tg_user: TGUser | None = None

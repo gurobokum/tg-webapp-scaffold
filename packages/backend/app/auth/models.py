@@ -1,3 +1,5 @@
+from typing import NewType
+
 from sqlalchemy import BigInteger, CheckConstraint, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -44,6 +46,9 @@ class TGUser(TimestampModel):
             if getattr(self, field) != getattr(user_data, field):
                 diff[field] = getattr(user_data, field)
         return diff
+
+
+TGAdminUser = NewType("TGAdminUser", TGUser)
 
 
 class TGInviteCode(TimestampModel):

@@ -27,6 +27,7 @@ dependencies = [
     "boto3<1.36.4",
     "types-boto[boto3, s3]>=2.49.18.20241019,<3",
     "dishka>=1.6.0,<2",
+    "redis[hiredis]>=5.3.1",
 ]
 
 [dependency-groups]

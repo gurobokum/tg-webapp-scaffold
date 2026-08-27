@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 import structlog
 from arq.connections import create_pool
+from redis.asyncio import Redis as AsyncRedis
 from telegram import BotCommand, Update
 
 from app.conf import settings
@@ -11,7 +12,8 @@ from app.credits.handlers import handlers as credits_handlers
 from app.db import AsyncSessionMaker
 from app.tgbot.app import TGApp, tg_app
 from app.tgbot.context import Context
-from app.tgbot.handlers import TEXTS, handlers
+from app.tgbot.handlers import handlers
+from app.tgbot.i18n import TEXTS
 from app.tgbot.utils import extract_user_data, get_texts
 from app.worker.conf import WorkerSettings
 
@@ -35,7 +37,7 @@ async def error_handler(update: object, context: Context) -> None:
 
 
 @asynccontextmanager
-async def start_tg_app(session_maker: AsyncSessionMaker) -> AsyncGenerator[TGApp, None]:
+async def start_tg_app(session_maker: AsyncSessionMaker) -> AsyncGenerator[TGApp]:
     tg_app.add_handlers(handlers)
     tg_app.add_handlers(credits_handlers)
     tg_app.add_error_handler(error_handler)
@@ -52,6 +54,7 @@ async def start_tg_app(session_maker: AsyncSessionMaker) -> AsyncGenerator[TGApp
     Context.arq = await create_pool(
         WorkerSettings.redis_settings, default_queue_name=WorkerSettings.queue_name
     )
+    Context.redis = AsyncRedis.from_url(settings.REDIS_URL.get_secret_value())
 
     async with tg_app:
         if tg_app.post_init is not None:
@@ -67,6 +70,7 @@ async def start_tg_app(session_maker: AsyncSessionMaker) -> AsyncGenerator[TGApp
         yield tg_app
 
         await Context.arq.aclose()
+        await Context.redis.aclose()
         if tg_app.updater is not None:
             await tg_app.updater.stop()
         await tg_app.stop()

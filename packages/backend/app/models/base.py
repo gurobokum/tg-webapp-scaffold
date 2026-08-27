@@ -7,13 +7,16 @@ import sqlalchemy
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import EmailStr, HttpUrl, TypeAdapter
-from sqlalchemy import LargeBinary, MetaData, String, TypeDecorator
+from sqlalchemy import ColumnElement, LargeBinary, MetaData, String, TypeDecorator, func
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.engine import Dialect
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, MappedColumn, mapped_column
+from sqlalchemy.sql.operators import OperatorType
 from sqlalchemy.types import TIMESTAMP
-from sqlalchemy_utils.types import EmailType
+
+from app.conf import settings
+from app.core import crypto
 
 
 def utc_now() -> datetime:
@@ -56,6 +59,56 @@ class HashType(TypeDecorator[str]):
         if value is None:
             return None
         return base64.urlsafe_b64encode(value).decode("utf-8")
+
+
+class EmailType(TypeDecorator[str]):
+    """
+    Stores emails lowercased and compares them case-insensitively.
+
+    Replacement for sqlalchemy_utils.types.EmailType.
+    """
+
+    impl = String(255)
+    cache_ok = True
+
+    class Comparator(String.Comparator[str]):
+        def operate(
+            self, op: OperatorType, *other: Any, **kwargs: Any
+        ) -> ColumnElement[Any]:
+            lowered = [func.lower(o) for o in other]
+            return cast(
+                ColumnElement[Any], op(func.lower(self.expr), *lowered, **kwargs)
+            )
+
+    comparator_factory = Comparator
+
+    def process_bind_param(self, value: str | None, dialect: Dialect) -> str | None:
+        if value is None:
+            return None
+        return value.lower()
+
+
+class EncryptedString(TypeDecorator[str]):
+    """
+    Stores the value AES-256-GCM-encrypted with SECRET_KEY (see app/core/crypto.py).
+    """
+
+    impl = LargeBinary
+    cache_ok = True
+
+    def process_bind_param(self, value: str | None, dialect: Dialect) -> bytes | None:
+        if value is None:
+            return None
+        return crypto.encrypt(
+            value,
+            settings.SECRET_KEY.get_secret_value(),
+            settings.SECRET_KEY_VERSION,
+        )
+
+    def process_result_value(self, value: bytes | None, dialect: Dialect) -> str | None:
+        if value is None:
+            return None
+        return crypto.decrypt(value, settings.SECRET_KEY.get_secret_value())
 
 
 def string_column(

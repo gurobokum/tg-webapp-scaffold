@@ -33,6 +33,7 @@ class Settings(BaseSettings):
 
     # Required
     SECRET_KEY: SecretStr
+    SECRET_KEY_VERSION: int = 1
     DATABASE_URL: SecretStr
     REDIS_URL: SecretStr
     TGBOT_NAME: str

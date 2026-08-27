@@ -83,7 +83,7 @@ strict_equality = true
 exclude = ["^examples/", "legacy/"]
 
 [[tool.mypy.overrides]]
-module = ["sqlalchemy_utils.*", "telethon.*", "authlib.*", "langchain_google_community.*"]
+module = ["telethon.*", "authlib.*", "langchain_google_community.*"]
 ignore_missing_imports = true
 
 [tool.ruff]

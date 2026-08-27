@@ -54,6 +54,11 @@ makemigrations = "alembic revision --autogenerate -m"
 migrate = "alembic upgrade head"
 printmigrations = "./scripts/print_migrations.sh"
 generate_openapi = "python -m scripts.generate_openapi"
+generate_i18n = "python -m scripts.generate_i18n"
+pre_lint = "task generate_i18n"
+pre_mypy = "task generate_i18n"
+pre_dev = "task generate_i18n"
+pre_worker = "task generate_i18n"
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/latest/config_file.html

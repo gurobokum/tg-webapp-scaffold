@@ -2,6 +2,7 @@
 coverage.json
 .env
 .python-version
+**/i18n/_generated.py
 
 __pycache__/
 .db/

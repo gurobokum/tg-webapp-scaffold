@@ -3,7 +3,7 @@ from pathlib import Path
 import structlog
 from dishka import FromDishka, Provider, Scope, provide
 
-from app.core.llm import load_prompts
+from app.core.utils import load_yaml
 from app.credits.i18n._generated import HandlersTexts as HandlersTexts
 from app.tgbot.i18n import Language
 from app.tgbot.utils import LocalizedTexts, get_texts
@@ -17,7 +17,7 @@ class Texts(LocalizedTexts[HandlersTexts]):
 
 
 try:
-    TEXTS: Texts = load_prompts(
+    TEXTS: Texts = load_yaml(
         Path(__file__).parent / "texts.yaml", Texts, key="handlers"
     )
 except Exception:

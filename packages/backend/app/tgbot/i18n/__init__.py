@@ -5,7 +5,7 @@ from dishka import FromDishka, Provider, Scope, provide
 from telegram import Update
 
 from app.core.errors import AppError
-from app.core.llm import load_prompts
+from app.core.utils import load_yaml
 from app.tgbot.i18n._generated import HandlersTexts as HandlersTexts
 from app.tgbot.utils import LocalizedTexts, extract_user_data, get_texts
 
@@ -20,7 +20,7 @@ class Texts(LocalizedTexts[HandlersTexts]):
 
 
 try:
-    TEXTS: Texts = load_prompts(
+    TEXTS: Texts = load_yaml(
         Path(__file__).parent / "texts.yaml", Texts, key="handlers"
     )
 except Exception:

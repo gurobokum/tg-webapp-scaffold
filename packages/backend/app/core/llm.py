@@ -1,4 +1,4 @@
-from typing import Literal, TypeAlias
+from typing import Literal
 
 import structlog
 from langchain_openai import ChatOpenAI
@@ -7,7 +7,7 @@ from app.conf import settings
 
 logger = structlog.get_logger()
 
-LLMModel: TypeAlias = ChatOpenAI
+type LLMModel = ChatOpenAI
 
 LLMModelName = Literal["gpt-4o", "o4-mini", "o3"]
 

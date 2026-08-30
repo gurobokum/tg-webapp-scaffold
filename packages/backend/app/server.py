@@ -25,7 +25,7 @@ class AppState(TypedDict):
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[AppState, None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[AppState]:
     engine = create_async_engine(settings.DATABASE_URL, "app")
     session_maker = create_session_maker(engine)
     arq = await create_pool(

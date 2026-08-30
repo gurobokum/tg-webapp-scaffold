@@ -1,8 +1,8 @@
+import tomllib
 from enum import Enum
 from pathlib import Path
 from typing import cast
 
-import tomllib
 from pydantic import HttpUrl, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 

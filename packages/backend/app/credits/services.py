@@ -19,7 +19,7 @@ from app.credits.schemas import CreditsPackage
 @asynccontextmanager
 async def spend_credits(
     db_session: AsyncSession, tg_user_id: int, amount: int
-) -> AsyncGenerator[None, None]:
+) -> AsyncGenerator[None]:
     tg_user_svc = TGUserService(db_session)
     lock_tx_id = await tg_user_svc.lock_credits(tg_user_id, amount)
     try:

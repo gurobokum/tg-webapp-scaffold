@@ -25,7 +25,7 @@ class BaseRepository:
     # https://docs.sqlalchemy.org/en/20/changelog/migration_20.html#session-subtransaction-behavior-removed
     # https://github.com/sqlalchemy/sqlalchemy/discussions/12140
     @asynccontextmanager
-    async def tx(self) -> AsyncGenerator[None, None]:
+    async def tx(self) -> AsyncGenerator[None]:
         if self.db_session.in_transaction():
             yield
             return

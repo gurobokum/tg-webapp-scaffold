@@ -1,8 +1,8 @@
 import contextlib
 import functools
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Callable
 from datetime import datetime
-from typing import Any, Callable, Protocol, TypedDict
+from typing import Any, Protocol, TypedDict
 
 import structlog
 from arq.connections import RedisSettings
@@ -33,7 +33,7 @@ class JobContext(BaseModel):
     db_session: AsyncSession
 
     @contextlib.asynccontextmanager
-    async def get_db_session(self) -> AsyncGenerator[AsyncSession, None]:
+    async def get_db_session(self) -> AsyncGenerator[AsyncSession]:
         async with self.db_session_maker() as db_session:
             try:
                 yield db_session

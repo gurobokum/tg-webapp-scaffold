@@ -70,9 +70,8 @@ async def test_file_exists_in_s3_raises_on_other_errors() -> None:
     stubber.add_client_error(
         "head_object", service_error_code="403", http_status_code=403
     )
-    with stubber:
-        with pytest.raises(ClientError):
-            await file_exists_in_s3(client, "a/b.bin")
+    with stubber, pytest.raises(ClientError):
+        await file_exists_in_s3(client, "a/b.bin")
 
 
 def test_get_signed_url() -> None:

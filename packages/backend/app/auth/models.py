@@ -10,7 +10,9 @@ from app.tgbot.schemas import UserTGData
 class TGUser(TimestampModel):
     __tablename__ = "tgbot_tg_users"
     __table_args__ = (
-        CheckConstraint("credit > 0", name="tgbot_tg_users__credits_balance_positive"),
+        CheckConstraint(
+            "credits_balance >= 0", name="tgbot_tg_users__credits_balance_positive"
+        ),
     )
 
     tg_id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
@@ -27,9 +29,6 @@ class TGUser(TimestampModel):
     credits_balance: Mapped[int] = mapped_column(default=0, server_default="0")
 
     # Foreign keys
-    user = mapped_column(
-        PostgresUUID, ForeignKey("auth_users.id"), nullable=True, index=True
-    )
     invite_code: Mapped[str] = mapped_column(
         ForeignKey("tgbot_tg_invite_codes.code"), nullable=True
     )

@@ -29,7 +29,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5441:5432
+          - 5443:5432
 
     steps:
       - uses: actions/checkout@v4
@@ -49,6 +49,9 @@ jobs:
 
       - name: Run mypy
         run: uv run task mypy
+
+      - name: Run tests
+        run: uv run task test
 
   deploy:
     name: deploy 🚀

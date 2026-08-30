@@ -37,6 +37,10 @@ dev = [
     "alembic>=1.15.2,<2",
     "alembic-postgresql-enum>=1.7.0,<2",
     "types-boto3[boto3, s3]==1.36.3",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "pytest-dotenv>=0.5.2",
 ]
 
 [tool.uv]
@@ -49,6 +53,8 @@ worker = "watchfiles --filter python 'arq app.worker.WorkerSettings'"
 lint = "ruff format --check . && ruff check --diff"
 format = "ruff format"
 mypy = "mypy ."
+test = "pytest"
+test_cov = "pytest --cov --cov-report=term-missing"
 makemigrations = "alembic revision --autogenerate -m"
 migrate = "alembic upgrade head"
 printmigrations = "./scripts/print_migrations.sh"
@@ -58,6 +64,19 @@ pre_lint = "task generate_i18n"
 pre_mypy = "task generate_i18n"
 pre_dev = "task generate_i18n"
 pre_worker = "task generate_i18n"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+env_files = [".env.test"]
+env_override_existing_values = 1
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/latest/config_file.html

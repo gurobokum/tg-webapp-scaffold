@@ -40,9 +40,12 @@ async def start(
                 text=texts.start.welcome_text,
             )
             return
+        text = texts.start.welcome_text
+    else:
+        text = texts.start.welcome_back_text
 
     await chat.send_message(
-        text=texts.start.welcome_back_text,
+        text=text,
         reply_markup=keyboard(
             [(texts.start.button_setup, WebAppInfo(settings.WEBAPP_URL))]
         ),

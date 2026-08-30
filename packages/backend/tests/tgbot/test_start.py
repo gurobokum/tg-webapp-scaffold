@@ -29,11 +29,13 @@ async def test_start_existing_user_gets_setup_keyboard(
 ) -> None:
     async with db_session_maker() as session:
         await TGUserService(session).create(
-            UserTGData(
-                tg_id=2002,
-                username="testuser2002",
-                first_name="Test",
-                language_code="ru",
+            UserTGData.model_validate(
+                {
+                    "id": 2002,
+                    "username": "testuser2002",
+                    "first_name": "Test",
+                    "language_code": "ru",
+                }
             )
         )
         await session.commit()

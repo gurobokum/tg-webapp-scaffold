@@ -16,6 +16,7 @@ def create_async_engine(url: SecretStr, application_name: str) -> AsyncEngine:
     engine = _create_async_engine(
         url.get_secret_value(),
         echo=settings.DEBUG_SQL,
+        pool_pre_ping=True,
         connect_args={"server_settings": {"application_name": application_name}},
     )
     if settings.LOGFIRE_TOKEN:

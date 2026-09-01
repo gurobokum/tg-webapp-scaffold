@@ -8,10 +8,10 @@ from app.tgbot.schemas import UserTGData
 
 
 class TGUser(TimestampModel):
-    __tablename__ = "tgbot_tg_users"
+    __tablename__ = "tg_users"
     __table_args__ = (
         CheckConstraint(
-            "credits_balance >= 0", name="tgbot_tg_users__credits_balance_positive"
+            "credits_balance >= 0", name="tg_users__credits_balance_positive"
         ),
     )
 
@@ -30,7 +30,7 @@ class TGUser(TimestampModel):
 
     # Foreign keys
     invite_code: Mapped[str] = mapped_column(
-        ForeignKey("tgbot_tg_invite_codes.code"), nullable=True
+        ForeignKey("tg_invite_codes.code"), nullable=True
     )
 
     def get_diff(self, user_data: UserTGData) -> dict[str, str | bool]:
@@ -51,7 +51,7 @@ TGAdminUser = NewType("TGAdminUser", TGUser)
 
 
 class TGInviteCode(TimestampModel):
-    __tablename__ = "tgbot_tg_invite_codes"
+    __tablename__ = "tg_invite_codes"
 
     code: Mapped[str] = string_column(primary_key=True)
     uses_left: Mapped[int] = mapped_column(default=1)
@@ -59,5 +59,5 @@ class TGInviteCode(TimestampModel):
 
     # Foreign keys
     tg_user_id = mapped_column(
-        BigInteger, ForeignKey("tgbot_tg_users.tg_id"), nullable=True, index=True
+        BigInteger, ForeignKey("tg_users.tg_id"), nullable=True, index=True
     )

@@ -35,7 +35,7 @@ class TGUserCreditsTx(RecordModel):
 
     # Foreign keys
     tg_user_id: Mapped[int | None] = mapped_column(
-        ForeignKey("tgbot_tg_users.tg_id", ondelete="SET NULL"),
+        ForeignKey("tg_users.tg_id", ondelete="SET NULL"),
         nullable=True,
         index=True,
     )
@@ -80,7 +80,7 @@ class TGUserCreditsPurchase(RecordModel):
 
     # Foreign keys
     tg_user_id: Mapped[int | None] = mapped_column(
-        ForeignKey("tgbot_tg_users.tg_id", ondelete="SET NULL"),
+        ForeignKey("tg_users.tg_id", ondelete="SET NULL"),
         nullable=True,
         index=True,
     )

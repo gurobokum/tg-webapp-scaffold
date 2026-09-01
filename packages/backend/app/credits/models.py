@@ -1,10 +1,10 @@
 import enum
 
 from pydantic import BaseModel
-from sqlalchemy import BigInteger, CheckConstraint, Enum, ForeignKey, Index
+from sqlalchemy import BigInteger, CheckConstraint, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.models.base import PydanticJSON, RecordModel
+from app.models.base import PydanticJSON, RecordModel, ValueEnum
 
 
 class CreditsTxStatus(str, enum.Enum):
@@ -28,11 +28,7 @@ class TGUserCreditsTx(RecordModel):
 
     amount: Mapped[int] = mapped_column(BigInteger, nullable=False)
     status: Mapped[CreditsTxStatus] = mapped_column(
-        Enum(
-            CreditsTxStatus,
-            name="tg_user_credits_transaction_status",
-            values_callable=lambda e: [i.value for i in e],
-        ),
+        ValueEnum(CreditsTxStatus, name="tg_user_credits_transaction_status"),
         default=CreditsTxStatus.LOCKED,
         nullable=False,
     )
@@ -77,11 +73,7 @@ class TGUserCreditsPurchase(RecordModel):
         nullable=True,
     )
     status: Mapped[CreditsPurchaseStatus] = mapped_column(
-        Enum(
-            CreditsPurchaseStatus,
-            name="tg_user_credits_purchase_status",
-            values_callable=lambda e: [i.value for i in e],
-        ),
+        ValueEnum(CreditsPurchaseStatus, name="tg_user_credits_purchase_status"),
         default=CreditsPurchaseStatus.INITIAL,
         nullable=False,
     )

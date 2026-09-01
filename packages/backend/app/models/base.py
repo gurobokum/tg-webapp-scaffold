@@ -51,6 +51,17 @@ PostgresUUID = cast(
 )
 
 
+class ValueEnum(sqlalchemy.Enum):
+    """
+    Enum column type that stores members' `.value` in Postgres instead of the
+    default `.name`.
+    """
+
+    def __init__(self, *enums: Any, **kwargs: Any) -> None:
+        kwargs.setdefault("values_callable", lambda e: [i.value for i in e])
+        super().__init__(*enums, **kwargs)
+
+
 class HashType(TypeDecorator[str]):
     impl = LargeBinary(64)
     cache_ok = True

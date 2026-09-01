@@ -1,0 +1,7 @@
+handlers:
+  ru:
+    generate_invites:
+      header: "Инвайты:"
+  en:
+    generate_invites:
+      header: "Invites:"

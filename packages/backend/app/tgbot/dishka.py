@@ -13,6 +13,7 @@ from app.core.errors import AppError, ForbiddenError, UserIsBlockedError
 from app.credits.i18n import TGBotCreditsI18NProvider
 from app.dishka import ServicesProvider
 from app.dishka import inject as inject_factory
+from app.tgbot.admin.i18n import TGBotAdminI18NProvider
 from app.tgbot.context import Context
 from app.tgbot.i18n import TGBotI18NProvider
 from app.tgbot.utils import extract_user_data
@@ -80,6 +81,7 @@ tg_container = make_async_container(
     ServicesProvider(),
     TGBotI18NProvider(),
     TGBotCreditsI18NProvider(),
+    TGBotAdminI18NProvider(),
 )
 
 

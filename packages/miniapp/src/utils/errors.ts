@@ -1,4 +1,4 @@
-import { HttpForbiddenError, HttpValidationError } from "@tg-webapp/sdk";
+import { HttpForbiddenError, HttpValidationError } from "@gramstack/sdk";
 
 export class AppError extends Error {}
 

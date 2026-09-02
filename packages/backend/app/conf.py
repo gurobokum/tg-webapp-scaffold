@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     DEBUG_SQL: bool = False
 
-    WEBAPP_URL: str
+    MINIAPP_URL: str
 
     # Required
     SECRET_KEY: SecretStr

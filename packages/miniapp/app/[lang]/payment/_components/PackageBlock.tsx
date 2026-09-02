@@ -5,7 +5,7 @@ import { FiZap, FiPackage, FiStar, FiAward } from "react-icons/fi";
 import { motion } from "framer-motion";
 import cn from "clsx";
 
-import { CreditsPackage } from "@tg-webapp/sdk";
+import { CreditsPackage } from "@gramstack/sdk";
 import { Language } from "@/i18n/conf";
 import { useTranslation } from "@/i18n/client";
 

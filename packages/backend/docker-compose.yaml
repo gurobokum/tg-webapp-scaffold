@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:16.2
-    container_name: tg_webapp_db
+    container_name: gramstack_db
     command: postgres -c log_statement=all
     volumes:
       - ./.db/:/var/lib/postgresql/data/
@@ -15,7 +15,7 @@ services:
 
   redis:
     image: redis/redis-stack:7.2.0-v13
-    container_name: tg_webapp_redis
+    container_name: gramstack_redis
     volumes:
       - ./.redis:/data/
     ports:
@@ -24,11 +24,11 @@ services:
 
   minio:
     image: minio/minio:latest
-    container_name: tg_webapp_minio
+    container_name: gramstack_minio
     volumes:
       - ./.minio:/data/
     entrypoint: sh
-    command: -c 'mkdir -p /data/tg_webapp && /usr/bin/docker-entrypoint.sh server /data --console-address ":9001"'
+    command: -c 'mkdir -p /data/gramstack && /usr/bin/docker-entrypoint.sh server /data --console-address ":9001"'
     environment:
       - MINIO_ROOT_USER=user
       - MINIO_ROOT_PASSWORD=password123

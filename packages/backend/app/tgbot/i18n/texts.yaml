@@ -2,27 +2,27 @@ handlers:
   ru:
     start:
       welcome_text: |
-        👋 Привет! Добро пожаловать в TG WebApp — скелетон телеграм вебаппа.
+        👋 Привет! Добро пожаловать в GramStack — фулстек-стартер для Telegram Mini Apps.
 
-        https://github.com/gurobokum/tg-webapp-scaffold
+        https://github.com/gurobokum/gramstack
       welcome_back_text: |
-        👋 С возвращением в TG WebApp!
+        👋 С возвращением в GramStack!
 
-        https://github.com/gurobokum/tg-webapp-scaffold
+        https://github.com/gurobokum/gramstack
       button_setup: Открыть приложение
     error_handler:
       banned_text: Ваш аккаунт заблокирован.
   en:
     start:
       welcome_text: |
-        👋 Hi! Welcome to TG WebApp — a skeleton for a Telegram WebApp.
+        👋 Hi! Welcome to GramStack — a full-stack starter for Telegram Mini Apps.
 
-        https://github.com/gurobokum/tg-webapp-scaffold
+        https://github.com/gurobokum/gramstack
 
       welcome_back_text: |
-        👋 Welcome back to TG WebApp!
+        👋 Welcome back to GramStack!
 
-        https://github.com/gurobokum/tg-webapp-scaffold
+        https://github.com/gurobokum/gramstack
       button_setup: Open the app
     error_handler:
       banned_text: Your account has been banned.

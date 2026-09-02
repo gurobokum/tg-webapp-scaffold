@@ -21,27 +21,11 @@ importers:
         specifier: ^16.1.2
         version: 16.4.0
 
-  packages/sdk:
+  packages/miniapp:
     dependencies:
-      '@hey-api/client-fetch':
-        specifier: ^0.10.0
-        version: 0.10.2(@hey-api/openapi-ts@0.66.7(typescript@5.9.3))
-    devDependencies:
-      '@hey-api/openapi-ts':
-        specifier: ^0.66.6
-        version: 0.66.7(typescript@5.9.3)
-      eslint:
-        specifier: ^9
-        version: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
-      prettier:
-        specifier: 3.5.3
-        version: 3.5.3
-      tsup:
-        specifier: ^8.4.0
-        version: 8.5.1(jiti@2.7.0)(postcss@8.5.25)(supports-color@7.2.0)(typescript@5.9.3)(yaml@2.9.0)
-
-  packages/webapp:
-    dependencies:
+      '@gramstack/sdk':
+        specifier: workspace:*
+        version: link:../sdk
       '@hey-api/client-fetch':
         specifier: ^0.10.0
         version: 0.10.2(@hey-api/openapi-ts@0.66.7(typescript@5.9.3))
@@ -51,9 +35,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.75.1
         version: 5.101.4(react@19.2.8)
-      '@tg-webapp/sdk':
-        specifier: workspace:*
-        version: link:../sdk
       accept-language:
         specifier: ^3.0.20
         version: 3.0.20
@@ -148,6 +129,25 @@ importers:
       yaml-loader:
         specifier: ^0.8.1
         version: 0.8.1
+
+  packages/sdk:
+    dependencies:
+      '@hey-api/client-fetch':
+        specifier: ^0.10.0
+        version: 0.10.2(@hey-api/openapi-ts@0.66.7(typescript@5.9.3))
+    devDependencies:
+      '@hey-api/openapi-ts':
+        specifier: ^0.66.6
+        version: 0.66.7(typescript@5.9.3)
+      eslint:
+        specifier: ^9
+        version: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
+      prettier:
+        specifier: 3.5.3
+        version: 3.5.3
+      tsup:
+        specifier: ^8.4.0
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.25)(supports-color@7.2.0)(typescript@5.9.3)(yaml@2.9.0)
 
 packages:
 
@@ -2195,6 +2195,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'

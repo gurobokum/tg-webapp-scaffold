@@ -2,7 +2,7 @@
 
 import { settings } from "@/conf";
 import { WebAppContext } from "@/providers/WebAppProvider";
-import { client } from "@tg-webapp/sdk";
+import { client } from "@gramstack/sdk";
 import { useContext, useMemo } from "react";
 
 export function useApi() {

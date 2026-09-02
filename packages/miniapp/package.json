@@ -1,5 +1,5 @@
 {
-  "name": "@tg-webapp/webapp",
+  "name": "@gramstack/miniapp",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -20,7 +20,7 @@
     "@hey-api/client-fetch": "^0.10.0",
     "@hookform/resolvers": "^5.0.1",
     "@tanstack/react-query": "^5.75.1",
-    "@tg-webapp/sdk": "workspace:*",
+    "@gramstack/sdk": "workspace:*",
     "accept-language": "^3.0.20",
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",

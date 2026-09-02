@@ -1,4 +1,4 @@
-name: webapp
+name: miniapp
 
 on:
   push:
@@ -48,9 +48,9 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=4096
         run: |
-          pnpm webapp:lint
-          pnpm webapp:format:check
-          pnpm webapp:ts
+          pnpm miniapp:lint
+          pnpm miniapp:format:check
+          pnpm miniapp:ts
 
   deploy:
     name: deploy 🚀
@@ -73,7 +73,7 @@ jobs:
           to: ${{ vars.TELEGRAM_UPDATES_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ❌ TGWebApp[webapp]. Deploy failed
+            ❌ GramStack[miniapp]. Deploy failed
 
             Commit message: ${{ github.event.commits[0].message }}
             https://github.com/${{ github.repository }}/actions/runs/${{github.run_id}}
@@ -84,7 +84,7 @@ jobs:
           to: ${{ vars.TELEGRAM_UPDATES_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ✅ TGWebApp[webapp]. Deploy succeed
+            ✅ GramStack[miniapp]. Deploy succeed
 
             Commit message: ${{ github.event.commits[0].message }}
             https://github.com/${{ github.repository }}/actions/runs/${{github.run_id}}

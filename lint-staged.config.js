@@ -1,8 +1,8 @@
 export default {
   "packages/backend/**": () => ["pnpm backend:lint", "pnpm backend:mypy"],
-  "packages/webapp/**": () => [
-    "pnpm webapp:lint",
-    "pnpm webapp:format:check",
-    "pnpm webapp:ts",
+  "packages/miniapp/**": () => [
+    "pnpm miniapp:lint",
+    "pnpm miniapp:format:check",
+    "pnpm miniapp:ts",
   ],
 };

@@ -1,4 +1,4 @@
-# TG WebApp scaffold
+# GramStack miniapp
 
 ## Setup tunnels
 

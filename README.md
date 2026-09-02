@@ -1,12 +1,12 @@
-# Telegram WebApp Scaffold
+# GramStack
 
-This repo contains scaffold for Telegram WebApp, for fast starting of Telegram WebApp.
+GramStack is a full-stack starter for Telegram Mini Apps: a Telegram bot paired with a Mini App frontend, for fast starting of new projects.
 
 It contains:
 
 - Authentication
 - Linters, formatters
-- WebApp and tgbot i18n
+- Mini App and tgbot i18n
 - Logging, Logfire integration
 - Credits system with stars
 - Invites system

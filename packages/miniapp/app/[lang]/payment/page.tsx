@@ -13,7 +13,7 @@ import {
   CreditsPackage,
   tgCreditsListPackages,
   tgCreditsSendInvoice,
-} from "@tg-webapp/sdk";
+} from "@gramstack/sdk";
 
 import { PackageBlock } from "./_components/PackageBlock";
 import { Language } from "@/i18n/conf";

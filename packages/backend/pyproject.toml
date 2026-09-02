@@ -1,7 +1,7 @@
 [project]
-name = "tg_webapp"
+name = "gramstack"
 version = "0.1.0"
-description = "TG WebApp"
+description = "GramStack"
 authors = [{ name = "Guro Bokum", email = "jiojiajiu@gmail.com" }]
 requires-python = ">=3.13,<3.14"
 readme = "README.md"

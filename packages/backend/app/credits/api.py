@@ -64,8 +64,8 @@ async def send_invoice(
 
     await Bot(settings.TGBOT_TOKEN.get_secret_value()).send_invoice(
         chat_id=user.tg_id,
-        title="TG WebApp",
-        description=f"Buy {package.credits_amount} credits for TG WebApp",
+        title="GramStack",
+        description=f"Buy {package.credits_amount} credits for GramStack",
         payload=json.dumps({"code": "buy_credits", "id": str(purchase.id)}),
         provider_token="",
         currency="XTR",

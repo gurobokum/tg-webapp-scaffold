@@ -59,7 +59,7 @@ app.include_router(credits_router)
 
 @app.get("/")
 async def root() -> dict[str, str]:
-    return {"message": f"TG WebApp v{settings.VERSION}"}
+    return {"message": f"GramStack v{settings.VERSION}"}
 
 
 configure_logging(name="api")

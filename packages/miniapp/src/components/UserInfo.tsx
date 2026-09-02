@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { FiUser } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 
-import { authMe } from "@tg-webapp/sdk";
+import { authMe } from "@gramstack/sdk";
 import CreditBlock from "./blocks/CreditBlock";
 import { getLang } from "@/i18n/utils";
 import { cookieName } from "@/i18n/conf";

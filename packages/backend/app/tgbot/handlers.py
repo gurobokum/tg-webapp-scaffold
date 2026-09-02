@@ -48,7 +48,7 @@ async def start(
     await chat.send_message(
         text=text,
         reply_markup=keyboard(
-            [(texts.start.button_setup, WebAppInfo(settings.WEBAPP_URL))]
+            [(texts.start.button_setup, WebAppInfo(settings.MINIAPP_URL))]
         ),
     )
 

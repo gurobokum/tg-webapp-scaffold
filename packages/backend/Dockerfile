@@ -2,17 +2,17 @@
 
 FROM docker.io/python:3.13.3-slim-bullseye
 
-LABEL name="TG WebApp" \
+LABEL name="GramStack" \
       maintainer="Guro Bokum <jiojiajiu@gmail.com>" \
-      org.opencontainers.image.source="https://github.com/gurobokum/tg-webapp-scaffold" \
-      org.opencontainers.image.description="TG WebAPP Scaffold" \
+      org.opencontainers.image.source="https://github.com/gurobokum/gramstack" \
+      org.opencontainers.image.description="GramStack backend - full-stack starter for Telegram Mini Apps" \
       org.opencontainers.image.licenses="MIT"
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     UV_PROJECT_ENVIRONMENT=/usr/local \
     UV_COMPILE_BYTECODE=1 \
-    APP_USER=tg_webapp \
+    APP_USER=gramstack \
     APP_HOME=/app
 
 RUN useradd --create-home $APP_USER

@@ -12,9 +12,9 @@ def configure_openapi(app: FastAPI) -> dict[str, Any]:
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
-        title="TG WebApp scaffold",
+        title="GramStack",
         version=settings.VERSION,
-        summary="TG WebApp scaffold",
+        summary="GramStack",
         routes=app.routes,
     )
     app.openapi_schema = openapi_schema

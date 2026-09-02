@@ -1,7 +1,7 @@
 {
-  "name": "@tg-webapp/sdk",
+  "name": "@gramstack/sdk",
   "version": "0.1.0",
-  "description": "TG Webapp SDK",
+  "description": "GramStack SDK",
   "main": "./src/index.ts",
   "type": "module",
   "scripts": {

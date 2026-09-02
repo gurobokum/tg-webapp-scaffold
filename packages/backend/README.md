@@ -1,4 +1,4 @@
-## TG WebApp scaffold backend
+## GramStack backend
 
 ### MinIO
 

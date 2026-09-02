@@ -43,7 +43,7 @@ class JobContext(BaseModel):
 
 class WorkerSettings:
     functions: list[Function] = []
-    queue_name: str = "tg-webapp:queue"
+    queue_name: str = "gramstack:queue"
     job_timeout = 60 * 60
 
     redis_settings = RedisSettings.from_dsn(settings.REDIS_URL.get_secret_value())

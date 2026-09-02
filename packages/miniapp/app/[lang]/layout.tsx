@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TG WebApp scaffold",
+  title: "GramStack",
   description: "Helps to build telegram web apps",
 };
 

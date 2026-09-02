@@ -369,6 +369,87 @@ wheels = [
 ]
 
 [[package]]
+name = "gramstack"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "arq", extra = ["watch"] },
+    { name = "asyncpg" },
+    { name = "authlib" },
+    { name = "boto3" },
+    { name = "cryptography" },
+    { name = "dishka" },
+    { name = "fastapi" },
+    { name = "langchain" },
+    { name = "langchain-openai" },
+    { name = "logfire", extra = ["fastapi", "sqlalchemy"] },
+    { name = "posthog" },
+    { name = "pydantic", extra = ["email"] },
+    { name = "pydantic-settings" },
+    { name = "python-telegram-bot" },
+    { name = "redis", extra = ["hiredis"] },
+    { name = "rich" },
+    { name = "ruamel-yaml" },
+    { name = "sqlalchemy", extra = ["asyncio"] },
+    { name = "structlog" },
+    { name = "types-boto" },
+    { name = "uvicorn", extra = ["standard"] },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "alembic" },
+    { name = "alembic-postgresql-enum" },
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-cov" },
+    { name = "pytest-dotenv" },
+    { name = "ruff" },
+    { name = "taskipy" },
+    { name = "types-boto3", extra = ["boto3", "s3"] },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "arq", extras = ["watch"], specifier = ">=0.26.3,<0.27" },
+    { name = "asyncpg", specifier = ">=0.30.0,<0.31" },
+    { name = "authlib", specifier = ">=1.5.2,<2" },
+    { name = "boto3", specifier = "<1.36.4" },
+    { name = "cryptography", specifier = ">=50.0.0,<51" },
+    { name = "dishka", specifier = ">=1.6.0,<2" },
+    { name = "fastapi", specifier = ">=0.115.12,<0.116" },
+    { name = "langchain", specifier = ">=0.3.25,<0.4" },
+    { name = "langchain-openai", specifier = ">=0.3.16,<0.4" },
+    { name = "logfire", extras = ["fastapi", "sqlalchemy"], specifier = ">=3.16.0,<4" },
+    { name = "posthog", specifier = ">=7.45.3" },
+    { name = "pydantic", extras = ["email"], specifier = ">=2.11.3,<3" },
+    { name = "pydantic-settings", specifier = ">=2.9.1,<3" },
+    { name = "python-telegram-bot", specifier = ">=22.0,<23" },
+    { name = "redis", extras = ["hiredis"], specifier = ">=5.3.1" },
+    { name = "rich", specifier = ">=14.0.0,<15" },
+    { name = "ruamel-yaml", specifier = ">=0.18.10,<0.19" },
+    { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.0.40,<3" },
+    { name = "structlog", specifier = ">=25.2.0,<26" },
+    { name = "types-boto", extras = ["boto3", "s3"], specifier = ">=2.49.18.20241019,<3" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.34.2,<0.35" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "alembic", specifier = ">=1.15.2,<2" },
+    { name = "alembic-postgresql-enum", specifier = ">=1.7.0,<2" },
+    { name = "mypy", specifier = ">=1.15.0,<2" },
+    { name = "pytest", specifier = ">=9.1.1" },
+    { name = "pytest-asyncio", specifier = ">=1.4.0" },
+    { name = "pytest-cov", specifier = ">=7.1.0" },
+    { name = "pytest-dotenv", specifier = ">=0.5.2" },
+    { name = "ruff", specifier = ">=0.11.7,<0.12" },
+    { name = "taskipy", specifier = ">=1.14.1,<2" },
+    { name = "types-boto3", extras = ["boto3", "s3"], specifier = "==1.36.3" },
+]
+
+[[package]]
 name = "greenlet"
 version = "3.5.4"
 source = { registry = "https://pypi.org/simple" }
@@ -1504,87 +1585,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/47/c6/ee486fd809e357697ee8a44d3d69222b344920433d3b6666ccd9b374630c/tenacity-9.1.4.tar.gz", hash = "sha256:adb31d4c263f2bd041081ab33b498309a57c77f9acf2db65aadf0898179cf93a", size = 49413, upload-time = "2026-02-07T10:45:33.841Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d7/c1/eb8f9debc45d3b7918a32ab756658a0904732f75e555402972246b0b8e71/tenacity-9.1.4-py3-none-any.whl", hash = "sha256:6095a360c919085f28c6527de529e76a06ad89b23659fa881ae0649b867a9d55", size = 28926, upload-time = "2026-02-07T10:45:32.24Z" },
-]
-
-[[package]]
-name = "tg-webapp"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "arq", extra = ["watch"] },
-    { name = "asyncpg" },
-    { name = "authlib" },
-    { name = "boto3" },
-    { name = "cryptography" },
-    { name = "dishka" },
-    { name = "fastapi" },
-    { name = "langchain" },
-    { name = "langchain-openai" },
-    { name = "logfire", extra = ["fastapi", "sqlalchemy"] },
-    { name = "posthog" },
-    { name = "pydantic", extra = ["email"] },
-    { name = "pydantic-settings" },
-    { name = "python-telegram-bot" },
-    { name = "redis", extra = ["hiredis"] },
-    { name = "rich" },
-    { name = "ruamel-yaml" },
-    { name = "sqlalchemy", extra = ["asyncio"] },
-    { name = "structlog" },
-    { name = "types-boto" },
-    { name = "uvicorn", extra = ["standard"] },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "alembic" },
-    { name = "alembic-postgresql-enum" },
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-cov" },
-    { name = "pytest-dotenv" },
-    { name = "ruff" },
-    { name = "taskipy" },
-    { name = "types-boto3", extra = ["boto3", "s3"] },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "arq", extras = ["watch"], specifier = ">=0.26.3,<0.27" },
-    { name = "asyncpg", specifier = ">=0.30.0,<0.31" },
-    { name = "authlib", specifier = ">=1.5.2,<2" },
-    { name = "boto3", specifier = "<1.36.4" },
-    { name = "cryptography", specifier = ">=50.0.0,<51" },
-    { name = "dishka", specifier = ">=1.6.0,<2" },
-    { name = "fastapi", specifier = ">=0.115.12,<0.116" },
-    { name = "langchain", specifier = ">=0.3.25,<0.4" },
-    { name = "langchain-openai", specifier = ">=0.3.16,<0.4" },
-    { name = "logfire", extras = ["fastapi", "sqlalchemy"], specifier = ">=3.16.0,<4" },
-    { name = "posthog", specifier = ">=7.45.3" },
-    { name = "pydantic", extras = ["email"], specifier = ">=2.11.3,<3" },
-    { name = "pydantic-settings", specifier = ">=2.9.1,<3" },
-    { name = "python-telegram-bot", specifier = ">=22.0,<23" },
-    { name = "redis", extras = ["hiredis"], specifier = ">=5.3.1" },
-    { name = "rich", specifier = ">=14.0.0,<15" },
-    { name = "ruamel-yaml", specifier = ">=0.18.10,<0.19" },
-    { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.0.40,<3" },
-    { name = "structlog", specifier = ">=25.2.0,<26" },
-    { name = "types-boto", extras = ["boto3", "s3"], specifier = ">=2.49.18.20241019,<3" },
-    { name = "uvicorn", extras = ["standard"], specifier = ">=0.34.2,<0.35" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "alembic", specifier = ">=1.15.2,<2" },
-    { name = "alembic-postgresql-enum", specifier = ">=1.7.0,<2" },
-    { name = "mypy", specifier = ">=1.15.0,<2" },
-    { name = "pytest", specifier = ">=9.1.1" },
-    { name = "pytest-asyncio", specifier = ">=1.4.0" },
-    { name = "pytest-cov", specifier = ">=7.1.0" },
-    { name = "pytest-dotenv", specifier = ">=0.5.2" },
-    { name = "ruff", specifier = ">=0.11.7,<0.12" },
-    { name = "taskipy", specifier = ">=1.14.1,<2" },
-    { name = "types-boto3", extras = ["boto3", "s3"], specifier = "==1.36.3" },
 ]
 
 [[package]]

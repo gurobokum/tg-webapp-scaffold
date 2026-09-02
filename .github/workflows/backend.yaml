@@ -6,7 +6,7 @@ on:
       - main
     paths-ignore:
       - packages/sdk/**
-      - packages/webapp/**
+      - packages/miniapp/**
   workflow_dispatch:
 
 defaults:
@@ -83,7 +83,7 @@ jobs:
           to: ${{ vars.TELEGRAM_UPDATES_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ❌ TGWebApp[backend]. Deploy failed
+            ❌ GramStack[backend]. Deploy failed
 
             Commit message: ${{ github.event.commits[0].message }}
             https://github.com/${{ github.repository }}/actions/runs/${{github.run_id}}
@@ -94,7 +94,7 @@ jobs:
           to: ${{ vars.TELEGRAM_UPDATES_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            ✅ TGWebApp[backend]. Deploy succeed
+            ✅ GramStack[backend]. Deploy succeed
 
             Commit message: ${{ github.event.commits[0].message }}
             https://github.com/${{ github.repository }}/actions/runs/${{github.run_id}}

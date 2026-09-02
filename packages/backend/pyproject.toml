@@ -27,6 +27,7 @@ dependencies = [
     "types-boto[boto3, s3]>=2.49.18.20241019,<3",
     "dishka>=1.6.0,<2",
     "redis[hiredis]>=5.3.1",
+    "posthog>=7.45.3",
 ]
 
 [dependency-groups]
@@ -64,6 +65,7 @@ pre_lint = "task generate_i18n"
 pre_mypy = "task generate_i18n"
 pre_dev = "task generate_i18n"
 pre_worker = "task generate_i18n"
+pre_test = "task generate_i18n"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

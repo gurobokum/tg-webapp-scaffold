@@ -5,14 +5,15 @@ import structlog
 from arq.connections import create_pool
 from redis.asyncio import Redis as AsyncRedis
 from telegram import BotCommand, Update
+from telegram.ext import ApplicationHandlerStop, TypeHandler
 
 from app.conf import settings
-from app.core.errors import ForbiddenError
+from app.core.errors import ForbiddenError, UserIsBannedError
 from app.credits.handlers import handlers as credits_handlers
 from app.db import AsyncSessionMaker
 from app.tgbot.app import TGApp, tg_app
 from app.tgbot.context import Context
-from app.tgbot.handlers import handlers
+from app.tgbot.handlers import handlers, signin_middleware
 from app.tgbot.i18n import TEXTS
 from app.tgbot.utils import extract_user_data, get_texts
 from app.worker.conf import WorkerSettings
@@ -22,25 +23,34 @@ logger = structlog.get_logger()
 
 async def error_handler(update: object, context: Context) -> None:
     error = context.error
+
+    if not isinstance(update, Update):
+        logger.exception("Exception while handling update:", exc_info=error)
+        return
+
+    user_data = extract_user_data(update)
+    chat = update.effective_chat
+    texts = get_texts(TEXTS, user_data.language_code) if user_data else TEXTS.en
+
+    if isinstance(error, UserIsBannedError):
+        if chat:
+            await chat.send_message(text=texts.error_handler.banned_text)
+        raise ApplicationHandlerStop
+
     # Show welcome message to user if he is not authorized
-    if isinstance(error, ForbiddenError) and isinstance(update, Update):
-        user_data = extract_user_data(update)
-        if user_data:
-            chat = update.effective_chat
-            texts = get_texts(TEXTS, user_data.language_code)
-            if chat:
-                await context.bot.send_message(
-                    chat_id=chat.id,
-                    text=texts.start.welcome_text,
-                )
+    if isinstance(error, ForbiddenError) and chat:
+        await chat.send_message(text=texts.start.welcome_text)
+
     logger.exception("Exception while handling update:", exc_info=error)
 
 
 @asynccontextmanager
 async def start_tg_app(session_maker: AsyncSessionMaker) -> AsyncGenerator[TGApp]:
+    tg_app.add_handler(TypeHandler(Update, signin_middleware), group=-1)
     tg_app.add_handlers(handlers)
     tg_app.add_handlers(credits_handlers)
     tg_app.add_error_handler(error_handler)
+
     if settings.TGBOT_SETUP_COMMANDS:
         await setup_commands(tg_app)
     if settings.TGBOT_WEBHOOK_URL and settings.TGBOT_WEBHOOK_SECRET_TOKEN:

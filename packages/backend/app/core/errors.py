@@ -27,6 +27,6 @@ class ForbiddenError(AppError):
     code = 403
 
 
-class UserIsBlockedError(AppError):
-    message = "User is blocked"
-    code = "user_blocked"
+class UserIsBannedError(AppError):
+    message = "User is banned"
+    code = "user_banned"

@@ -5,6 +5,7 @@ from telegram.ext import Application, ApplicationBuilder, ContextTypes, ExtBot
 
 from app.db import AsyncSessionMaker
 from app.tgbot.context import Context
+from tests.helpers.bot import TEST_BOT_ID
 
 
 def make_update(
@@ -37,6 +38,34 @@ def make_update(
                 },
                 "text": text,
                 "entities": entities,
+            },
+        },
+        bot,
+    )
+
+
+def make_chat_member_update(
+    bot: ExtBot[None], *, user_id: int = 1001, new_status: str = "kicked"
+) -> Update:
+    old_status = "member" if new_status == "kicked" else "kicked"
+    user = {"id": user_id, "is_bot": False, "first_name": "Test"}
+    bot_user = {"id": TEST_BOT_ID, "is_bot": True, "first_name": "Test Bot"}
+
+    def member(status: str) -> dict[str, Any]:
+        data: dict[str, Any] = {"user": bot_user, "status": status}
+        if status == "kicked":
+            data["until_date"] = 0
+        return data
+
+    return Update.de_json(
+        {
+            "update_id": 2,
+            "my_chat_member": {
+                "chat": {"id": user_id, "type": "private"},
+                "from": user,
+                "date": 1,
+                "old_chat_member": member(old_status),
+                "new_chat_member": member(new_status),
             },
         },
         bot,

@@ -1,11 +1,35 @@
-from collections.abc import Sequence
-from typing import Generic, TypeVar, cast
+from collections.abc import Awaitable, Sequence
+from typing import Any, Generic, TypeVar, cast
 
+import structlog
 from pydantic import BaseModel
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, WebAppInfo
+from telegram.error import Forbidden
 
+from app.auth.services import TGUserService
+from app.posthog import PostHogEvent, posthog
 from app.tgbot.context import Context
 from app.tgbot.schemas import UserTGData
+
+logger = structlog.get_logger()
+
+
+async def send_or_mark_blocked(
+    user_svc: TGUserService, tg_user_id: int, send: Awaitable[Any]
+) -> bool:
+    """
+    Await a send call; on Forbidden (user blocked the bot) mark the user
+    is_bot_blocked=True and return False instead of raising. The posthog event
+    fires only on the first transition, so retries stay quiet.
+    """
+    try:
+        await send
+    except Forbidden:
+        if await user_svc.mark_bot_blocked(tg_user_id):
+            posthog.capture(tg_user_id, PostHogEvent.USER_BLOCKED_BOT)
+        return False
+    return True
+
 
 type KeyboardButton = tuple[str, str | WebAppInfo]
 

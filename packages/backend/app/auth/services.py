@@ -1,4 +1,5 @@
 import secrets
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import sql
@@ -71,6 +72,72 @@ class TGUserService(BaseService):
                 tg_user = result.scalar_one()
 
         return tg_user
+
+    async def update_user(self, tg_user_id: int, **values: Any) -> TGUser:
+        async with self.tx():
+            result = await self.db_session.execute(
+                sql.update(TGUser)
+                .filter_by(tg_id=tg_user_id)
+                .values(**values)
+                .returning(TGUser)
+            )
+        return result.scalar_one()
+
+    async def mark_bot_blocked(self, tg_user_id: int) -> bool:
+        """
+        Returns True only on the first transition to bot-blocked.
+        """
+        async with self.tx():
+            result = await self.db_session.execute(
+                sql.update(TGUser)
+                .filter_by(tg_id=tg_user_id, is_bot_blocked=False)
+                .values(is_bot_blocked=True)
+                .returning(TGUser.tg_id)
+            )
+        return result.scalar_one_or_none() is not None
+
+    async def mark_bot_unblocked(self, tg_user_id: int) -> bool:
+        """
+        Returns True only on the transition from bot-blocked back to reachable.
+        """
+        async with self.tx():
+            result = await self.db_session.execute(
+                sql.update(TGUser)
+                .filter_by(tg_id=tg_user_id, is_bot_blocked=True)
+                .values(is_bot_blocked=False)
+                .returning(TGUser.tg_id)
+            )
+        return result.scalar_one_or_none() is not None
+
+    async def list_users(
+        self,
+        limit: int,
+        *,
+        after_tg_id: int | None = None,
+        exclude_banned: bool = False,
+        exclude_bot_blocked: bool = False,
+    ) -> list[TGUser]:
+        """
+        Keyset pagination by tg_id: pass the last seen tg_id to get the next
+        page. Stable under concurrent inserts/deletes, unlike OFFSET.
+        """
+        query = sql.select(TGUser).order_by(TGUser.tg_id).limit(limit)
+        if after_tg_id is not None:
+            query = query.filter(TGUser.tg_id > after_tg_id)
+        if exclude_banned:
+            query = query.filter_by(is_banned=False)
+        if exclude_bot_blocked:
+            query = query.filter_by(is_bot_blocked=False)
+        async with self.tx():
+            result = await self.db_session.execute(query)
+        return list(result.scalars().all())
+
+    async def count_users(self) -> int:
+        async with self.tx():
+            result = await self.db_session.execute(
+                sql.select(sql.func.count(TGUser.tg_id))
+            )
+        return result.scalar_one()
 
     async def add_credits(self, tg_user_id: int, amount: int) -> TGUser:
         async with self.tx():

@@ -52,6 +52,8 @@ class Settings(BaseSettings):
     TGBOT_WEBHOOK_SECRET_TOKEN: SecretStr | None = None
     CORS_ALLOW_ORIGINS: list[str] = []
     LOGFIRE_TOKEN: SecretStr | None = None
+    POSTHOG_API_KEY: SecretStr | None = None
+    POSTHOG_HOST: str | None = None
     # Optional -- LLM
     OPENAI_API_KEY: SecretStr
 

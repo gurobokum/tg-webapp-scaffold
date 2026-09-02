@@ -23,7 +23,8 @@ class TGUser(TimestampModel):
     language_code: Mapped[str] = string_column(8)
 
     is_bot: Mapped[bool] = mapped_column(nullable=False, default=False)
-    is_blocked: Mapped[bool] = mapped_column(nullable=False, default=False)
+    is_banned: Mapped[bool] = mapped_column(nullable=False, default=False)
+    is_bot_blocked: Mapped[bool] = mapped_column(nullable=False, default=False)
     is_admin: Mapped[bool] = mapped_column(nullable=False, default=False)
 
     credits_balance: Mapped[int] = mapped_column(default=0, server_default="0")

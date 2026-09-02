@@ -10,6 +10,8 @@ handlers:
 
         https://github.com/gurobokum/tg-webapp-scaffold
       button_setup: Открыть приложение
+    error_handler:
+      banned_text: Ваш аккаунт заблокирован.
   en:
     start:
       welcome_text: |
@@ -22,3 +24,5 @@ handlers:
 
         https://github.com/gurobokum/tg-webapp-scaffold
       button_setup: Open the app
+    error_handler:
+      banned_text: Your account has been banned.

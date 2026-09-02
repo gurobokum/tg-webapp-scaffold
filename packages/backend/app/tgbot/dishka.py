@@ -9,10 +9,11 @@ from telegram import Chat, Message, Update
 
 from app.auth.models import TGAdminUser, TGUser
 from app.auth.services import TGUserService
-from app.core.errors import AppError, ForbiddenError, UserIsBlockedError
+from app.core.errors import AppError, ForbiddenError, UserIsBannedError
 from app.credits.i18n import TGBotCreditsI18NProvider
 from app.dishka import ServicesProvider
 from app.dishka import inject as inject_factory
+from app.posthog import PostHogEvent, posthog
 from app.tgbot.admin.i18n import TGBotAdminI18NProvider
 from app.tgbot.context import Context
 from app.tgbot.i18n import TGBotI18NProvider
@@ -64,9 +65,12 @@ class TGBotRootProvider(Provider):
         tg_user = await user_svc.get_user_and_update(user_data)
         if not tg_user:
             raise ForbiddenError("User not found", tg_id=user_data.tg_id)
-        if tg_user.is_blocked:
-            raise UserIsBlockedError
+        if tg_user.is_banned:
+            raise UserIsBannedError
 
+        posthog.set(
+            distinct_id=str(tg_user.tg_id), properties={"username": tg_user.username}
+        )
         return tg_user
 
     @provide(scope=Scope.REQUEST)

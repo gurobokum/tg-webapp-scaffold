@@ -38,7 +38,6 @@ async def test_start_existing_user_gets_setup_keyboard(
                 }
             )
         )
-        await session.commit()
 
     bot = await make_offline_bot()
     update = make_update(bot, user_id=2002, language_code="ru")

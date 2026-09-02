@@ -18,6 +18,7 @@ class CollectingRequest(BaseRequest):
 
     def __init__(self) -> None:
         self.calls: list[tuple[str, dict[str, Any]]] = []
+        self.forbidden_chat_ids: set[int] = set()
 
     @property
     def read_timeout(self) -> float | None:
@@ -42,6 +43,14 @@ class CollectingRequest(BaseRequest):
         endpoint = url.rsplit("/", 1)[-1]
         parameters = request_data.parameters if request_data else {}
         self.calls.append((endpoint, parameters))
+        if parameters.get("chat_id") in self.forbidden_chat_ids:
+            return 403, json.dumps(
+                {
+                    "ok": False,
+                    "error_code": 403,
+                    "description": "Forbidden: bot was blocked by the user",
+                }
+            ).encode()
         return 200, json.dumps(
             {"ok": True, "result": self._result(endpoint, parameters)}
         ).encode()

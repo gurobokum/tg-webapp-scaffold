@@ -1,12 +1,14 @@
 import structlog
 from dishka import FromDishka
 from telegram import Chat, Update, WebAppInfo
-from telegram.ext import CommandHandler
+from telegram.constants import ChatMemberStatus
+from telegram.ext import ChatMemberHandler, CommandHandler
 
 from app.auth.errors import InvalidInviteCodeError
 from app.auth.services import TGUserService
 from app.conf import settings
-from app.core.errors import AppError
+from app.core.errors import AppError, UserIsBannedError
+from app.posthog import PostHogEvent, posthog
 from app.tgbot.admin.handlers import handlers as admin_handlers
 from app.tgbot.context import Context
 from app.tgbot.dishka import inject
@@ -51,7 +53,51 @@ async def start(
     )
 
 
+@inject
+async def signin_middleware(
+    update: Update,
+    context: Context,
+    user_svc: FromDishka[TGUserService],
+) -> None:
+    """
+    Runs before every handler (group -1): drops updates from admin-blocked
+    users and clears is_bot_blocked when such a user writes to the bot again.
+    """
+    user_data = extract_user_data(update)
+    if not user_data:
+        return
+
+    user = await user_svc.get_user(user_data.tg_id)
+    if not user:
+        return
+
+    if user.is_banned:
+        raise UserIsBannedError
+
+    if user.is_bot_blocked and await user_svc.mark_bot_unblocked(user.tg_id):
+        posthog.capture(user.tg_id, PostHogEvent.USER_UNBLOCKED_BOT)
+
+
+@inject
+async def track_bot_block(
+    update: Update,
+    context: Context,
+    user_svc: FromDishka[TGUserService],
+) -> None:
+    member = update.my_chat_member
+    if not member or member.chat.type != Chat.PRIVATE:
+        return
+
+    tg_id = member.from_user.id
+    status = member.new_chat_member.status
+    if status == ChatMemberStatus.BANNED and await user_svc.mark_bot_blocked(tg_id):
+        posthog.capture(tg_id, PostHogEvent.USER_BLOCKED_BOT)
+    elif status == ChatMemberStatus.MEMBER and await user_svc.mark_bot_unblocked(tg_id):
+        posthog.capture(tg_id, PostHogEvent.USER_UNBLOCKED_BOT)
+
+
 handlers = [
     CommandHandler("start", start),
+    ChatMemberHandler(track_bot_block, ChatMemberHandler.MY_CHAT_MEMBER),
     *admin_handlers,
 ]

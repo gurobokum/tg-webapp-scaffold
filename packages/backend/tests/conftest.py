@@ -1,6 +1,7 @@
 from collections.abc import AsyncIterator
 
 import pytest
+from redis.asyncio import Redis as AsyncRedis
 from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, create_async_engine
 
 import app.models.all  # noqa: F401
@@ -25,7 +26,19 @@ async def db_session_maker(db_engine: AsyncEngine) -> AsyncIterator[AsyncSession
     async with db_engine.connect() as conn:
         tx = await conn.begin()
         session_maker = async_sessionmaker(
-            bind=conn, expire_on_commit=False, join_transaction_mode="create_savepoint"
+            bind=conn,
+            expire_on_commit=False,
+            autobegin=False,
+            autoflush=False,
+            join_transaction_mode="create_savepoint",
         )
         yield session_maker
         await tx.rollback()
+
+
+@pytest.fixture
+async def redis() -> AsyncIterator[AsyncRedis]:
+    client: AsyncRedis = AsyncRedis.from_url(settings.REDIS_URL.get_secret_value())
+    await client.flushdb()
+    yield client
+    await client.aclose()
